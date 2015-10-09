@@ -1,0 +1,21 @@
+**README**
+
+Dependencies
+1) MongoDB
+2) Node.js
+
+
+Once there are no dependencies.
+
+1) Do npm install on bash and install all the frameworks required by node.js
+
+2) Node modules have not been uploaded as part of submission, so step 1 is mandatory.
+
+3) Once node modules are installed, create a database in mongodb with PA3.
+
+4) Start node using 
+
+		# node app.js
+
+	app.js is entry point for the program.
+

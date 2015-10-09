@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>iSearch</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<style>
+.container{
+	margin-right: 60px;
+}
+</style>
+<style>
+
+#AboutForm{
+	display: none;
+}
+
+#ResultsForm {
+  display:none;
+}
+</style>
+
+<script>
+$(document).ready(function(){
+	$("#list1 li").not('.emptyMessage').click(function(){
+		if (this.id =="About") {
+			$("#ApiSearchForm").hide();
+      $("#ResultsForm").hide();
+			$("#Search").attr("class","default");
+			$("#About").attr("class","active");
+			$('#AboutForm').show();
+      $("#dataTable tbody").empty();
+		} else {
+			$("#ApiSearchForm").show();
+			$("#Search").attr("class","active");
+			$("#About").attr("class","default");
+			$('#AboutForm').hide();
+      $("#ResultsForm").hide();
+      $("#dataTable tbody").empty();
+		}
+	});
+});
+
+</script>
+
+<script>
+function changeLayout() {
+    if (document.getElementById('headlabel').innerHTML == 'Mashup Search') {
+        document.getElementById('headlabel').innerHTML = 'API Search';
+        document.getElementById("Rating").disabled = false;
+        document.getElementById("RatingLabel").disabled = false;
+        document.getElementById("UsedAPIs").disabled=true;
+        document.getElementById("UsedAPIsLabel").disabled=true;
+        document.getElementById("CategoryLabel").disabled=false;
+        document.getElementById("Category").disabled=false;
+        document.getElementById("ProtocolsLabel").disabled=false;    
+        document.getElementById("Protocols").disabled=false;
+    } else {
+      document.getElementById('headlabel').innerHTML = 'Mashup Search';
+      document.getElementById("Rating").disabled = true;
+      document.getElementById("RatingLabel").disabled = true;
+      document.getElementById("UsedAPIs").disabled=false;
+      document.getElementById("UsedAPIsLabel").disabled=false;
+      document.getElementById("CategoryLabel").disabled=true;
+      document.getElementById("Category").disabled=true;
+      document.getElementById("ProtocolsLabel").disabled=true;    
+      document.getElementById("Protocols").disabled=true;
+    }
+}
+</script>
+
+</head>
+<body>
+
+<div class="jumbotron">
+  <h1>iSearch</h1>      
+  <p>Simple API/Mashup Finder</p>
+</div>
+
+<ul id="list1" class="nav nav-pills" style="margin-left:20px">
+	<li id="Search" class="active"><a href="#">Search</a></li>
+	<li id="About"><a href="#">About</a></li>
+</ul>
+
+<div id="ApiSearchForm" class="container">
+  <p id="ApiSearchError"></p>
+  <h2 id='headlabel'>API Search</h2>
+  <form class="form-horizontal" role="form">
+    <div class="form-group"> 
+      <div class="btn-group">
+        <button type="button" data-switch-set="size" data-switch-value="API" id="Type" onclick="changeLayout()" class="btn btn-default">API</button>
+        <button type="button" data-switch-set="size" data-switch-value="MASHUP" id="Type" onclick="changeLayout()" class="btn btn-default">MASHUP</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="Keywords">KeyWords:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="Keywords" placeholder="Use commas to seperate keywords">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="Year">Year:</label>
+      <div class="col-sm-10">          
+        <input type="text" class="form-control" id="Year" placeholder="(Default:2012)">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" id="ProtocolsLabel" for="Protocols">Protocols:</label>
+      <div class="col-sm-10">          
+        <input type="text" class="form-control" id="Protocols" placeholder="Use commas to seperate keywords (Default:REST)">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" id="RatingLabel" for="Rating">Rating:</label>
+      <div class="col-sm-10">          
+        <input type="text" class="form-control" id="Rating" placeholder="(Default:0.0)">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" id="CategoryLabel" for="Category">Category:</label>
+      <div class="col-sm-10">          
+        <input type="text" class="form-control" id="Category" placeholder="(Default:.)">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" id="UsedAPIsLabel" disabled for="UsedAPIs">UsedAPIs:</label>
+      <div class="col-sm-10">          
+        <input type="text" class="form-control" id="UsedAPIs" disabled placeholder="Use commas to seperate keywords (Default:Everything(.))">
+      </div>
+    </div>
+    <div class="form-group" style="margin-left:200px">        
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-default">Clear</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div id="AboutForm" class="container">
+	<blockquote>
+	<h4>About</h4>
+	<p>"Designed and built by"<a href="https://twitter.com/Pranav_Taurus">@pranav_taurus</a></p>
+	<footer>Copyright © 2015 My Inc</footer>
+	</blockquote>
+</div>
+
+<div id="ResultsForm" class="container">
+  <div id="alertNoResults" class="alert alert-danger">
+    <strong>No Results Found :(</strong> Search query resulted in 0 results.
+  </div>
+  <div id="alertResults" class="alert alert-success">
+    
+  </div>
+  <h4>Results</h4>
+<div class="bs-example">
+    <table id="dataTable" class="table">
+
+
+    </table>
+</div>
+</div>
+
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    jQuery(function($){
+      var socket = io.connect();
+      var $searchForm = $('#ApiSearchForm');
+      var $searchError = $('#ApiSearchError');
+      var $keywordSearch = $('#Keywords');
+      var $year = $('#Year');
+      var $Protocols = $('#Protocols');
+      var $Rating = $('#Rating');
+      var $Category = $('#Category');
+      var $resultsForm = $('#ResultsForm');
+      var $ResultsData= $('#table');
+      var $UsedAPIs = $('#UsedAPIs');
+   
+      $searchForm.submit(function(e){
+        e.preventDefault();
+        console.log("Subitting");
+        socket.emit('searchTerms', {searchType: document.getElementById('headlabel').innerHTML,keyWords: $keywordSearch.val(), year: $year.val(), Protocols: $Protocols.val(), Rating: $Rating.val(), Category: $Category.val(), UsedAPIs: $UsedAPIs.val()}, function(data){
+          if(data){
+            $('#ApiSearchForm').hide();
+            $('#ResultsForm').show();
+          } else{
+            $searchError.html('No results returned!! :(');
+          }
+        });
+        $keywordSearch.val('');
+        $year.val('');
+        $Protocols.val('');
+        $Rating.val('');
+
+      });
+
+      socket.on('APIresults', function(data){
+        $("#ApiSearchForm").hide();
+        $("#alertNoResults").hide();
+        $("#alertResults").hide();
+        $("#ResultsForm").show();
+
+        displayMsg(data);
+      });
+      socket.on('MashupResults', function(data){
+        $("#ApiSearchForm").hide();
+        $("#alertNoResults").hide();
+        $("#alertResults").hide();
+        $("#ResultsForm").show();
+
+        displayMsgMASH(data);
+      });
+
+
+      function displayMsg(data){
+        //$ResultsData.append('');
+        $(document).ready(function(){
+
+          if (data.n.length == 0) {
+            $("#alertNoResults").show("");
+            $('#alertResults').empty();
+            $("#dataTable").empty();
+          } else {
+            $('#alertResults').empty();
+            $("#alertResults").append("<strong>Success </strong> " + data.n.length + " results found");
+            $("#alertResults").show();
+            $("#dataTable").empty();
+            $("#dataTable").append( "<thead> <tr> <th>Name</th><th>Updated Year</th> <th>Protocols</th><th>Category</th><th>Rating</th></tr></thead><tbody></tbody>");
+          }
+
+          for (var i = 0;  i < data.n.length; i++) {
+              $("#dataTable").append("<tr> <td>" + data.n[i] +"</td>" + "<td>" + data.u[i] + "</td>" + "<td>" + data.p[i] + "</td>" + "<td>" + data.c[i] + "</td>" + "<td>" + data.r[i] + "</td>" + "</tr>");
+          }
+
+        });
+
+        
+
+        //$ResultsData.append('<span class="msg"><b>' + data[i]..id+ ': </b>' + data[i].res.title+ "</span><br/>");
+
+      }
+
+      function displayMsgMASH(data) {
+
+          if (data.n.length == 0) {
+            $("#alertNoResults").show("");
+            $('#alertResults').empty();
+          } else {
+            $('#alertResults').empty();
+            $("#alertResults").append("<strong>Success </strong> " + data.n.length + " results found");
+            $("#dataTable").append( "<thead><tr><th>Name</th></tr></thead>");
+            $("#alertResults").show();
+          }
+
+          for (var i = 0;  i < data.n.length; i++) {
+
+              $("#dataTable").append("<tr> <td>" + data.n[i] +"</td>");
+          }
+
+      }
+      
+    });
+  </script>
+
+</body>
+</html>
+
+
+
+
